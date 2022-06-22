@@ -1,11 +1,17 @@
 
 import requests
 import json
+import pyap
+from geoapify import geoapify
 #from six.moves import configparser
 
 
 import warnings
 warnings.filterwarnings('ignore')
+
+
+apiKey = "XXXXXXX" # Key is removed because it is a public repository
+
 
 ''' --> Will be used later to read the database configuration from ini file
 
@@ -73,6 +79,7 @@ def main():
     f = open('Y12SR.json', 'w')
 
     for meeting in allMeetings:
+        
         days,times = day_time(meeting)
         if (days and times):
 
@@ -85,8 +92,24 @@ def main():
             for time in times:
                 timesStr += "'" + time+"',"
             timesStr = "[" + timesStr[:-1] + "]"
+            address = str(parse_address(meeting.replace("\n", "")))
 
-            newRecString = "{\"days\":" + daysStr + ", \"times\": " + timesStr + ", \"details\": \"" + meeting.replace("\"", "") + "\"}"
+            lat = "-"
+            lon = "-"
+
+            if address != "-":
+                try:
+                    name, city, county, state, country, country_code, formatted, lon, lat, result_type, confidence, confidence_city_level, match_type = geoapify(address, apiKey)
+                except:
+                    lat = "-"
+                    lon = "-"
+
+            if lat == "":
+                lat = "-"
+            if lon == "":
+                lon = "-"
+
+            newRecString = "{\"days\":" + daysStr + ", \"times\": " + timesStr + ", \"address\": \"" + address +  "\"" + ", \"latitude\": \"" + str(lat) + "\"" + ", \"longitude\": \"" + str(lon) + "\"" +  " , \"details\": \"" + meeting.replace("\"", "") + "\"}"
             newRecString = newRecString.replace("\'", "\"")
             print(newRecString)
             newRec = json.loads(newRecString, strict=False)
@@ -140,6 +163,18 @@ def day_time(meetingString): #extract day name and time from the string
     return meetingDays,meetingTimes
 
 
+
+
+def parse_address(addr):
+    address = pyap.parse(addr, country = "US")
+    if not address:
+        address = pyap.parse(addr, country = "CA")
+    if not address:
+        address = pyap.parse(addr, country = "GB")
+    if address:
+        return address[0]
+    else:
+        return "-"
 
 
 
