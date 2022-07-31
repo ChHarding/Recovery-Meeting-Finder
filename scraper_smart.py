@@ -164,7 +164,7 @@ def main():
         jsonData.append(newRec)
 
     f = open('SMART.json', 'w')
-    f.write(json.dumps(jsonData))
+    f.write("SData = '" + json.dumps(jsonData) + "';")
 
 
 

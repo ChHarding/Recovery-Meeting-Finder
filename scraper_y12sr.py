@@ -79,7 +79,7 @@ def main():
     f = open('Y12SR.json', 'w')
 
     for meeting in allMeetings:
-        
+
         days,times = day_time(meeting)
         if (days and times):
 
@@ -115,7 +115,7 @@ def main():
             newRec = json.loads(newRecString, strict=False)
             jsonData.append(newRec)
 
-    f.write(json.dumps(jsonData))
+    f.write("YData = '" + json.dumps(jsonData) + "';")
 
 
 
@@ -156,7 +156,7 @@ def day_time(meetingString): #extract day name and time from the string
                         timeString = hour + ":" + minutes
                 else:
                     continue
-                
+
                 meetingDays.append(day)
                 meetingTimes.append(timeString)
 
