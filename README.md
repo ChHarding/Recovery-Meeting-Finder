@@ -28,6 +28,7 @@ The front-end is built in HTML/CSS and vanilla JavaScript, to decrease the compl
 2. Copy all the following files to a directory in your website path (all in the same folder):
  * `scraper_y12sr.py`
  * `scraper_smart.py`
+ * `geoapify.py`
  * `y12sr.json`
  * `smart.json`
  * `index.html`
