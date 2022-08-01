@@ -12,6 +12,11 @@ Here is a [live demo](https://ronakphotography.com/meetingfinder/) of this proje
 ![Preview available at: https://ronakphotography.com/meetingfinder/preview.gif](https://ronakphotography.com/meetingfinder/preview.gif)
 
 
+#Requirements
+* Python 3+
+* pyap package
+* BeautifulSoup package
+
 
 ## How does it work?
 This application is composed of a back-end (Python), and a front-end (HTML/CSS/JavaScript). In the back-end, the data of [Y12SR](https://y12sr.com/) and [SMART Recovery](https://www.smartrecovery.org/) meetings are scraped and stored in JSON format. The following figure shows how the back-end works. `scraper_y12sr.py` and `scraper_smart.py` get the data of the meetings from their websites. In order to prepare the data to be shown on the map, the coordinates are required. So, a third-party API, namely [Geoapify](https://www.geoapify.com/), is utilized to convert the addresses to `{Latitude, Longitude}`. It should be noted that using this API requires an API Key, which is not free. Then, the data are stored in `y12sr.json` and `smart.json`.
