@@ -1,9 +1,22 @@
+'''
+===========================================================
+It is a part of the back-end that scrapes the data from
+https://y12sr.com/meetings/find-a-meeting-by-state/
+and stores them as a JSON file.
+
+Input: None
+Output: Y12SR.json
+
+Dependents: Front-end requires the Y12SR.json to show the
+            meetings on the map.
+Dependency: geoapify.py
+==========================================================
+'''
 
 import requests
 import json
 import pyap
 from geoapify import geoapify
-#from six.moves import configparser
 
 
 import warnings
@@ -11,21 +24,6 @@ warnings.filterwarnings('ignore')
 
 
 apiKey = "XXXXXXX" # Key is removed because it is a public repository
-
-
-''' --> Will be used later to read the database configuration from ini file
-
-config = configparser.ConfigParser()
-config.read('./config/config.ini')
-username = config.get('CREDENTIALS','username')
-password = config.get('CREDENTIALS','password')
-host     = config.get('CREDENTIALS','host')
-database = config.get('CREDENTIALS','database')
-backups  = config.get('CREDENTIALS','backups')
-'''
-
-
-
 
 
 
@@ -42,6 +40,7 @@ def main():
     page = requests.get(url, headers=header).text
 
     lines = page.split("\n")
+
 
     wrappers = []
     allMeetings = []
@@ -123,7 +122,9 @@ def main():
 
 
 
-def day_time(meetingString): #extract day name and time from the string
+def day_time(meetingString):
+    '''Extract day name and time from the string. '''
+
     meetingDays = []
     meetingTimes = []
 
@@ -166,6 +167,9 @@ def day_time(meetingString): #extract day name and time from the string
 
 
 def parse_address(addr):
+    ''' Gets an address which might or might not be in standard form,
+    and returns the address in standard form '''
+
     address = pyap.parse(addr, country = "US")
     if not address:
         address = pyap.parse(addr, country = "CA")

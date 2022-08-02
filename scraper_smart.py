@@ -1,10 +1,23 @@
+'''
+====================================================================
+It is a part of the back-end that scrapes the ID of meeting pages from
+https://meetings.smartrecovery.org/meetings/?location=usa&page=
+and the contents of the meeting pages by their IDs from
+https://meetings.smartrecovery.org/meetings/[ID]
+and stores them as a JSON file.
+
+Input: None
+Output: SMART.json
+
+Dependents: Front-end requires the Y12SR.json to show the meetings
+             on the map.
+Dependency: BeautifulSoup package
+====================================================================
+'''
+
 import requests
 import json
 from bs4 import BeautifulSoup, Comment
-
-#import pyap
-#from geoapify import geoapify
-#from six.moves import configparser
 
 
 import warnings
@@ -12,20 +25,6 @@ warnings.filterwarnings('ignore')
 
 
 apiKey = "XXXXXXX" # Key is removed because it is a public repository
-
-
-''' --> Will be used later to read the database configuration from ini file
-config = configparser.ConfigParser()
-config.read('./config/config.ini')
-username = config.get('CREDENTIALS','username')
-password = config.get('CREDENTIALS','password')
-host     = config.get('CREDENTIALS','host')
-database = config.get('CREDENTIALS','database')
-backups  = config.get('CREDENTIALS','backups')
-'''
-
-
-
 
 
 
@@ -72,8 +71,6 @@ def main():
     # ===== Get meeting info from meeting pages ======================
     meetingPage = "https://meetings.smartrecovery.org/meetings/"
 
-    #For test:
-    #PageIDs = [3712, 3715, 3717, 3718, 3728, 3768, 3776, 3793, 4102, 4103, 4104, 4110, 4178]
 
     jsonData = []
 
