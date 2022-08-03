@@ -1,3 +1,22 @@
+'''
+===========================================================
+This class geocodes the addresses. Two parameters are passed
+to this class: an address and an API key. Then, it uses a
+third party service, namely Geoapify(https://www.geoapify.com/)
+to get the coordinates of the address.
+Geoapify is a paid service!
+
+Input: searchText (or address), and apiKey
+Output: Specifications of the searched address, including:
+        name, city, county, state, country, country_code,
+        formatted, lon, lat, result_type, confidence,
+        confidence_city_level, match_type
+
+Dependents: scraper_y12sr.py
+Dependency: Geoapify service
+==========================================================
+'''
+
 import requests
 from requests.structures import CaseInsensitiveDict
 
@@ -15,7 +34,9 @@ def geoapify (searchText, apiKey):
     places = json['features']
     numberOfPlaces = len(places)
 
-    #print(numberOfPlaces)
+
+    # It might return more than one address.
+    # So, we consider only the first one, which is the most likely correct address.
 
     if (numberOfPlaces>0):
 

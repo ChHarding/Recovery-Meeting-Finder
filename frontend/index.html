@@ -1,0 +1,121 @@
+<html>
+<head>
+  <title>Recovery meeting finder</title>
+
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.8.0/dist/leaflet.css" integrity="sha512-hoalWLoI8r4UszCkZ5kL8vayOGVae1oxXe/2A4AO6J9+580uKHDO3JdHb7NzwwzK5xr/Fs0W40kiNHxM9vyTtQ==" crossorigin=""/>
+  <script src="https://unpkg.com/leaflet@1.8.0/dist/leaflet.js" integrity="sha512-BB3hKbKWOc9Ez/TAwyWxNXeoV9c1v6FIeYiBieIWkpLjauysF18NzgR1MBNBXf8/KABdlkX68nAhlwcDFLGPCQ==" crossorigin=""></script>
+  <script src="https://cdn-geoweb.s3.amazonaws.com/esri-leaflet/0.0.1-beta.5/esri-leaflet.js"></script>
+  <script src="https://cdn-geoweb.s3.amazonaws.com/esri-leaflet-geocoder/0.0.1-beta.5/esri-leaflet-geocoder.js"></script>
+  <link rel="stylesheet" type="text/css" href="https://cdn-geoweb.s3.amazonaws.com/esri-leaflet-geocoder/0.0.1-beta.5/esri-leaflet-geocoder.css">
+
+  <script type="text/javascript" src="Y12SR.json"> //Data does in YData variable </script>
+  <script type="text/javascript" src="SMART.json"> //Data does in SData variable </script>
+  <script type="text/javascript" src="functions.js"></script>
+  <link rel="stylesheet" href="style.css"/>
+</head>
+
+<body>
+  <div class=header>
+    <div class=title>
+      <img src=img/icon.jpg style=height:25px;margin-top:10px;>
+      Recovery Meeting Finder
+    </div>
+    <div class=title2>
+      HCI 584X - Term Project
+      <br><b>Ronak Karimi</b> <i>(<a href=mailto:ronak@iastate.edu style=color:rgba(130,190,255,1);>ronak@iastate.edu</a>)</i>
+    </div>
+  </div>
+
+  <div id="map"></div>
+  <div class=rightpanel>
+
+    <div class=toolbarTitle>Meeting types:</div>
+
+    <div style=display:flex;width:100%;padding:10px;padding-left:30px;>
+      <div style='display:inline-block;width:300px;'>
+        Show <b>Y12SR</b> meetings
+      </div>
+      <div style='display:inline-block;'>
+        <label class="switch">
+          <input type="checkbox" checked id=chk_y12sr onchange="refreshMap();">
+          <span class="slider round"></span>
+        </label>
+      </div>
+    </div>
+    <div style=display:flex;width:100%;padding:10px;padding-left:30px;>
+      <div style='display:inline-block;width:300px'>
+        Show <b>SMART</b> meetings
+      </div>
+      <div style='display:inline-block;'>
+        <label class="switch">
+          <input type="checkbox" checked id=chk_smart onchange="refreshMap();">
+          <span class="slider round"></span>
+        </label>
+      </div>
+    </div>
+
+
+
+    <div class=toolbarTitle>Day:</div>
+    <select name="meetingDay" id="meeting_day" onchange="refreshMap();">
+        <option value="mondays" id="meeting_day1" style="color: black;">Mondays</option>
+        <option value="tuesdays" id="meeting_day2" style="color: black;">Tuesdays</option>
+        <option value="wednesdays" id="meeting_day3" style="color: black;">Wednesdays</option>
+        <option value="thursdays" id="meeting_day4" style="color: black;">Thursdays</option>
+        <option value="fridays" id="meeting_day5" style="color: black;">Fridays</option>
+        <option value="saturdays" id="meeting_day6" style="color: black;">Saturdays</option>
+        <option value="sundays" id="meeting_day0" style="color: black;">Sundays</option>
+      </select>
+
+    <br>
+    <br>
+
+    <div class=toolbarTitle>Time:</div>
+    <div slider id="slider-distance">
+      <div>
+        <div inverse-left style="width:70%;"></div>
+        <div inverse-right style="width:70%;"></div>
+        <div range style="left:0%;right:0%;"></div>
+        <span thumb style="left:0%;"></span>
+        <span thumb style="left:100%;"></span>
+        <div sign style="left:0%;">
+          <span id="value">0:00</span>
+        </div>
+        <div sign style="left:100%;">
+          <span id="value">24:00</span>
+        </div>
+      </div>
+      <input type="range" id=from_time tabindex="0" value="0" max="24" min="0" step="1" oninput="
+      this.value=Math.min(this.value,this.parentNode.childNodes[5].value-1);
+      var value=(100/(parseInt(this.max)-parseInt(this.min)))*parseInt(this.value)-(100/(parseInt(this.max)-parseInt(this.min)))*parseInt(this.min);
+      var children = this.parentNode.childNodes[1].childNodes;
+      children[1].style.width=value+'%';
+      children[5].style.left=value+'%';
+      children[7].style.left=value+'%';children[11].style.left=value+'%';
+      children[11].childNodes[1].innerHTML=this.value+':00';"
+
+      onchange="refreshMap();"
+      />
+
+      <input type="range" id=to_time tabindex="0" value="100" max="24" min="0" step="1" oninput="
+      this.value=Math.max(this.value,this.parentNode.childNodes[3].value-(-1));
+      var value=(100/(parseInt(this.max)-parseInt(this.min)))*parseInt(this.value)-(100/(parseInt(this.max)-parseInt(this.min)))*parseInt(this.min);
+      var children = this.parentNode.childNodes[1].childNodes;
+      children[3].style.width=(100-value)+'%';
+      children[5].style.right=(100-value)+'%';
+      children[9].style.left=value+'%';children[13].style.left=value+'%';
+      children[13].childNodes[1].innerHTML=this.value+':00';"
+
+      onchange="refreshMap();"
+      />
+    </div>
+  </div>
+
+
+
+  <div class=leftpanel id=leftpanel>
+    <div style=position:absolute onclick="">&times;</div>
+  </div>
+
+</body>
+<script type="text/javascript" src="init_map.js"></script>
